@@ -29,10 +29,17 @@ after_script:
 - ps -C nginx
 - ls -A --color /var/www
 
+- ls --color /var/run
 - grep cgi.fix_pathinfo /etc/php5/fpm/php.ini
 - php-fpm --version
+- php-fpm --ini
 - command -v php-fpm
-- ls ~/.phpenv/versions/*/etc/php-fpm.conf.default
-- cat ~/.phpenv/versions/*/etc/php-fpm.conf.default
-- find ~/.phpenv/versions -name php.ini
+- ls $(command -v php-fpm) --color
+- ls $(command -v php-fpm) --color --dereference
+- ls ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+- cat ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+- find ~/.phpenv/versions/$(phpenv version-name) -name php.ini
+- man php-fpm
+- php-fpm
+- ls --color /var/run
 - ps -C php-fpm

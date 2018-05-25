@@ -1,0 +1,37 @@
+language: php
+sudo: true
+
+env:
+- PS_FORMAT=user,pid,ppid,nlwp,%mem,args
+
+before_install:
+- sudo aptitude update -Z
+- sudo aptitude install nginx -Z --assume-yes
+
+
+script:
+- service nginx status
+- w3m -dump http://localhost:80
+
+
+after_script:
+- man nginx
+- dpkg --listfiles nginx
+- dpkg --listfiles nginx-common
+- dpkg --listfiles nginx-core
+- ls --color --recursive /etc/nginx
+- cat /etc/nginx/nginx.conf
+- cat /etc/nginx/sites-available/default
+- cat /etc/default/nginx
+- ls --color /usr/share/nginx/html
+- w3m -dump /usr/share/nginx/html/index.html
+- w3m -dump /usr/share/nginx/html/50x.html
+- ps -C nginx
+- ls -A --color /var/www
+
+- grep cgi.fix_pathinfo /etc/php5/fpm/php.ini
+- php-fpm --version
+- command -v php-fpm
+- ls ~/.phpenv/versions/*/etc/php-fpm.conf.default
+- cat ~/.phpenv/versions/*/etc/php-fpm.conf.default
+- ps -C php-fpm

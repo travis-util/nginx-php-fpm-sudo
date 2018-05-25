@@ -24,7 +24,7 @@ after_script:
 - cat /etc/nginx/nginx.conf
 - cat /etc/nginx/sites-available/default
 - cat .nginx-default
-- colordiff --minimal --side-by-side 
+- colordiff --minimal --side-by-side /etc/nginx/sites-available/default .nginx-default
 - mv .nginx-default /etc/nginx/sites-available/default
 - cat /etc/default/nginx
 - ls --color /usr/share/nginx/html

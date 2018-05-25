@@ -25,7 +25,7 @@ after_script:
 - cat /etc/nginx/sites-available/default
 - cat .nginx-default
 - colordiff --minimal --side-by-side /etc/nginx/sites-available/default .nginx-default
-- mv .nginx-default /etc/nginx/sites-available/default
+- cp --force .nginx-default /etc/nginx/sites-available/default
 - cat /etc/default/nginx
 - ls --color /usr/share/nginx/html
 - w3m -dump /usr/share/nginx/html/index.html

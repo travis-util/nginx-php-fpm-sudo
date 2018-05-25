@@ -34,4 +34,5 @@ after_script:
 - command -v php-fpm
 - ls ~/.phpenv/versions/*/etc/php-fpm.conf.default
 - cat ~/.phpenv/versions/*/etc/php-fpm.conf.default
+- find ~/.phpenv/versions -name php.ini
 - ps -C php-fpm

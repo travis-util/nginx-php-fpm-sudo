@@ -35,15 +35,17 @@ after_script:
 - php --ini
 - php-fpm -h
 - php-fpm -i
+- ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm -i
 - command -v php-fpm
 - ls $(command -v php-fpm) --color
 - ls $(command -v php-fpm) --color --dereference
 - ls ~/.phpenv/versions --color
 - ls ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
-- find ~/.phpenv/versions/$(phpenv version-name) -name php.ini
+- find ~/.phpenv/versions -name php.ini
 - find ~/.phpenv/versions/$(phpenv version-name) -name php.ini
 - man php-fpm
 - php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - ls --color /var/run
 - ps -C php-fpm
+- find / -name php5-fpm.sock

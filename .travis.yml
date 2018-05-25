@@ -53,8 +53,10 @@ after_script:
 - find ~/.phpenv/versions -name php.ini
 - find ~/.phpenv/versions/$(phpenv version-name) -name php.ini
 - man php-fpm
-- sudo php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default # sudo: php-fpm: command not found
-- sudo ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+- php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+# - sudo ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+#^ ERROR: [pool www] cannot get gid for group 'nobody'
+# sudo: php-fpm: command not found
 - ls --color /var/run
 - ls --color log
 - ls --color log/php-fpm.log

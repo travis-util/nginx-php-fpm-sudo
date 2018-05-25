@@ -7,6 +7,7 @@ env:
 before_install:
 - sudo aptitude update -Z
 - sudo aptitude install nginx -Z --assume-yes
+- sudo aptitude install colordiff -Z --assume-yes
 
 
 script:
@@ -22,6 +23,9 @@ after_script:
 - ls --color --recursive /etc/nginx
 - cat /etc/nginx/nginx.conf
 - cat /etc/nginx/sites-available/default
+- cat .nginx-default
+- colordiff --minimal --side-by-side 
+- mv .nginx-default /etc/nginx/sites-available/default
 - cat /etc/default/nginx
 - ls --color /usr/share/nginx/html
 - w3m -dump /usr/share/nginx/html/index.html
@@ -30,7 +34,7 @@ after_script:
 - ls -A --color /var/www
 
 - ls --color /var/run
-- grep cgi.fix_pathinfo /etc/php5/fpm/php.ini
+- grep cgi.fix_pathinfo /etc/php5/fpm/php.ini #####################################3
 - php-fpm --version
 - php --ini
 - php-fpm -h
@@ -42,10 +46,22 @@ after_script:
 - ls ~/.phpenv/versions --color
 - ls ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+- grep '^listen' ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+- grep 'error_log' ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+- grep '^pm = ' ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+- grep '^pm.max_children' ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - find ~/.phpenv/versions -name php.ini
 - find ~/.phpenv/versions/$(phpenv version-name) -name php.ini
 - man php-fpm
-- php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+- sudo php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - ls --color /var/run
+- ls --color log
+- ls --color log/php-fpm.log
+- ls --color /log
+- ls --color /log/php-fpm.log
 - ps -C php-fpm
-- find / -name php5-fpm.sock
+# - find / -name php5-fpm.sock
+
+- sudo service nginx restart
+- cp info.php /usr/share/nginx/html
+- w3m -dump http://localhost:80/info.php

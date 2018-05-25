@@ -25,7 +25,7 @@ after_script:
 - cat /etc/nginx/sites-available/default
 - cat .nginx-default
 - colordiff --minimal --side-by-side /etc/nginx/sites-available/default .nginx-default
-- cp --force .nginx-default /etc/nginx/sites-available/default
+- sudo cp --force .nginx-default /etc/nginx/sites-available/default
 - cat /etc/default/nginx
 - ls --color /usr/share/nginx/html
 - w3m -dump /usr/share/nginx/html/index.html
@@ -53,7 +53,8 @@ after_script:
 - find ~/.phpenv/versions -name php.ini
 - find ~/.phpenv/versions/$(phpenv version-name) -name php.ini
 - man php-fpm
-- sudo php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+- sudo php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default # sudo: php-fpm: command not found
+- sudo ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - ls --color /var/run
 - ls --color log
 - ls --color log/php-fpm.log
@@ -63,5 +64,6 @@ after_script:
 # - find / -name php5-fpm.sock
 
 - sudo service nginx restart
-- cp info.php /usr/share/nginx/html
+- ps -C nginx
+- sudo cp info.php /usr/share/nginx/html
 - w3m -dump http://localhost:80/info.php

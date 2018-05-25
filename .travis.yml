@@ -32,14 +32,18 @@ after_script:
 - ls --color /var/run
 - grep cgi.fix_pathinfo /etc/php5/fpm/php.ini
 - php-fpm --version
-- php-fpm --ini
+- php --ini
+- php-fpm -h
+- php-fpm -i
 - command -v php-fpm
 - ls $(command -v php-fpm) --color
 - ls $(command -v php-fpm) --color --dereference
+- ls ~/.phpenv/versions --color
 - ls ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - find ~/.phpenv/versions/$(phpenv version-name) -name php.ini
+- find ~/.phpenv/versions/$(phpenv version-name) -name php.ini
 - man php-fpm
-- php-fpm
+- php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - ls --color /var/run
 - ps -C php-fpm

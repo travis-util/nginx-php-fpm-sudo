@@ -15,6 +15,7 @@ script:
 - w3m -dump http://localhost:80
 - curl --connect-timeout 1 http://localhost | w3m -dump -T text/html
 - curl http://icanhazip.com
+- ping -c 1 $(curl http://icanhazip.com)
 - curl --connect-timeout 1 http://$(curl http://icanhazip.com) | w3m -dump -T text/html
 
 

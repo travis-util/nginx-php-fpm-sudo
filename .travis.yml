@@ -13,6 +13,9 @@ before_install:
 script:
 - service nginx status
 - w3m -dump http://localhost:80
+- curl --connect-timeout 1 http://localhost | w3m -dump -T text/html
+- curl http://icanhazip.com
+- curl --connect-timeout 1 http://$(curl http://icanhazip.com) | w3m -dump -T text/html
 
 
 after_script:
@@ -25,6 +28,8 @@ after_script:
 - cat /etc/nginx/sites-available/default
 - grep 'server_name.*;$' /etc/nginx/sites-available/*
 - cat .nginx-default
+- grep 'server_name.*;$' /etc/nginx/sites-available/* .nginx-default
+- grep 'server_name.*;$' .nginx-default
 - colordiff --minimal --side-by-side /etc/nginx/sites-available/default .nginx-default
 - sudo cp --force .nginx-default /etc/nginx/sites-available/default
 - cat /etc/default/nginx

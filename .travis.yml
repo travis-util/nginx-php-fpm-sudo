@@ -17,6 +17,7 @@ script:
 - curl http://icanhazip.com
 - ping -c 1 $(curl http://icanhazip.com)
 - curl --connect-timeout 1 http://$(curl http://icanhazip.com) | w3m -dump -T text/html
+- ping -c 1 $(ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//' | head --lines=1)
 
 
 after_script:

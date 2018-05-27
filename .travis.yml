@@ -9,7 +9,8 @@ before_install:
 - sudo aptitude install nginx -Z --assume-yes && ps -C nginx
 - sudo aptitude install colordiff -Z --assume-yes
 
-- type w3m
+- shopt -s expand_aliases
+- alias
 - alias grep='grep --color'
 - alias ls='ls --color'
 - alias ping='ping -c 1'

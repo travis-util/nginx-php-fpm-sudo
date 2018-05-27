@@ -22,8 +22,8 @@ before_install:
 
 
 install:
-- php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default -i | grep cgi.fix_pathinfo
-- php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default && ps -C php-fpm
+- php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default --define cgi.fix_pathinfo=0 -i | grep cgi.fix_pathinfo
+- php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default --define cgi.fix_pathinfo=0 && ps -C php-fpm
 # - sudo ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 #^ ERROR: [pool www] cannot get gid for group 'nobody'
 # sudo: php-fpm: command not found

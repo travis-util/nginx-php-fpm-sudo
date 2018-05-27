@@ -13,6 +13,7 @@ before_install:
 - alias ls='ls --color'
 - alias ping='ping -c 1'
 - alias w3m='w3m -dump'
+- alias
 - curlw () { curl --connect-timeout 3 $@ | w3m -dump -T text/html ; } # Does not take w3m alias.
 - icanh=$(curl http://icanhazip.com)
 - ipeth0=$(ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//' | head --lines=1)

@@ -77,6 +77,7 @@ after_script:
 - grep '^pm = ' ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - grep '^pm.max_children' ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - find ~/.phpenv/versions -name php.ini
+- grep 'cgi.fix_pathinfo' $(find ~/.phpenv/versions -name php.ini)
 - find ~/.phpenv/versions/$(phpenv version-name) -name php.ini
 - man php-fpm
 - ls /var/run

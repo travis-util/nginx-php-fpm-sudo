@@ -9,11 +9,13 @@ before_install:
 - sudo aptitude install nginx -Z --assume-yes && ps -C nginx
 - sudo aptitude install colordiff -Z --assume-yes
 
+- type w3m
 - alias grep='grep --color'
 - alias ls='ls --color'
 - alias ping='ping -c 1'
 - alias w3m='w3m -dump'
 - alias
+- type w3m
 - curlw () { curl --connect-timeout 3 $@ | w3m -dump -T text/html ; } # Does not take w3m alias.
 - icanh=$(curl http://icanhazip.com)
 - ipeth0=$(ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//' | head --lines=1)
@@ -25,8 +27,9 @@ install:
 #^ ERROR: [pool www] cannot get gid for group 'nobody'
 # sudo: php-fpm: command not found
 - sudo cp info.php /usr/share/nginx/html
-- sudo cp --force .nginx-default /etc/nginx/sites-available/default
-- sudo service nginx restart
+- sudo mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.orig
+- sudo cp .nginx-default /etc/nginx/sites-available/default
+- sudo service nginx restart && ps -C nginx
 
 
 script:
@@ -49,9 +52,9 @@ after_script:
 - colordiff --unified --minimal /etc/nginx/sites-available/default .nginx-default
 - cat /etc/default/nginx
 - ls /usr/share/nginx/html
+- type w3m
 - w3m /usr/share/nginx/html/index.html
 - w3m /usr/share/nginx/html/50x.html
-- ps -C nginx
 - ls -A /var/www
 
 - ls /var/run

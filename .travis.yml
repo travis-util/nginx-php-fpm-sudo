@@ -5,25 +5,24 @@ env:
 - PS_FORMAT=user,pid,ppid,nlwp,%mem,args
 
 before_install:
-- sudo aptitude update -Z
-- sudo aptitude install nginx -Z --assume-yes && ps -C nginx
-- sudo aptitude install colordiff -Z --assume-yes
-
 - shopt -s expand_aliases
 - alias
+- alias diff='colordiff'
 - alias grep='grep --color'
 - alias ls='ls --color'
 - alias ping='ping -c 1'
 - alias w3m='w3m -dump'
-- alias
-- type w3m
-- curlw () { curl --connect-timeout 3 $@ | w3m -dump -T text/html ; } # Does not take w3m alias.
+- curlw () { curl --connect-timeout 3 $@ | w3m -T text/html ; }
 - icanh=$(curl http://icanhazip.com)
 - ipeth0=$(ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//' | head --lines=1)
 
+- sudo aptitude update -Z
+- sudo aptitude install nginx -Z --assume-yes && ps -C nginx
+- sudo aptitude install colordiff -Z --assume-yes
+
 
 install:
-- php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+- php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default && ps -C php-fpm
 # - sudo ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 #^ ERROR: [pool www] cannot get gid for group 'nobody'
 # sudo: php-fpm: command not found
@@ -45,15 +44,13 @@ after_script:
 - dpkg --listfiles nginx-core
 - ls --recursive /etc/nginx
 - cat /etc/nginx/nginx.conf
+- cat /etc/nginx/sites-available/default.orig
 - cat /etc/nginx/sites-available/default
 - grep 'server_name.*;$' /etc/nginx/sites-available/*
-- cat .nginx-default
-- grep 'server_name.*;$' .nginx-default
-- colordiff --side-by-side --minimal /etc/nginx/sites-available/default .nginx-default
-- colordiff --unified --minimal /etc/nginx/sites-available/default .nginx-default
+- diff --side-by-side --minimal /etc/nginx/sites-available/default .nginx-default
+- diff --unified --minimal /etc/nginx/sites-available/default .nginx-default
 - cat /etc/default/nginx
 - ls /usr/share/nginx/html
-- type w3m
 - w3m /usr/share/nginx/html/index.html
 - w3m /usr/share/nginx/html/50x.html
 - ls -A /var/www
@@ -83,12 +80,11 @@ after_script:
 - ls log/php-fpm.log
 - ls /log
 - ls /log/php-fpm.log
-- ps -C php-fpm
 # - find / -name php5-fpm.sock
 
 - w3m http://localhost:80/info.php
 
-- ping1 $icanh
+- ping $icanh
 - curlw $icanh
-- ping1 $ipeth0
+- ping $ipeth0
 - curlw $ipeth0

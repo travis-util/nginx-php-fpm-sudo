@@ -71,6 +71,7 @@ after_script:
 - ls ~/.phpenv/versions
 - ls ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+- grep 'cgi.fix_pathinfo' ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - grep '^listen' ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - grep 'error_log' ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - grep '^pm = ' ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default

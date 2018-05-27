@@ -57,7 +57,7 @@ after_script:
 - ls -A /var/www
 
 - ls /var/run
-- grep cgi.fix_pathinfo /etc/php5/fpm/php.ini #####################################3
+- grep cgi.fix_pathinfo /etc/php5/fpm/php.ini # If config from Ubuntu was used.
 - php-fpm --version
 - php --ini
 - php-fpm -h

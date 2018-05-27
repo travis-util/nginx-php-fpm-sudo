@@ -48,8 +48,8 @@ after_script:
 - cat /etc/nginx/sites-available/default.orig
 - cat /etc/nginx/sites-available/default
 - grep 'server_name.*;$' /etc/nginx/sites-available/*
-- diff --side-by-side --minimal /etc/nginx/sites-available/default .nginx-default
-- diff --unified --minimal /etc/nginx/sites-available/default .nginx-default
+- diff --side-by-side --minimal /etc/nginx/sites-available/default.orig .nginx-default
+- diff --unified --minimal /etc/nginx/sites-available/default.orig .nginx-default
 - cat /etc/default/nginx
 - ls /usr/share/nginx/html
 - w3m /usr/share/nginx/html/index.html

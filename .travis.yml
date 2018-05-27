@@ -6,19 +6,31 @@ env:
 
 before_install:
 - sudo aptitude update -Z
-- sudo aptitude install nginx -Z --assume-yes
+- sudo aptitude install nginx -Z --assume-yes && ps -C nginx
 - sudo aptitude install colordiff -Z --assume-yes
+
+- ls () { ls --color $@ ; }
+- grep () { grep --color $@ ; }
+- w3m () { w3m -dump $@ ; }
+- curlw () { curl --connect-timeout 3 $@ | w3m -T text/html ; }
+- ping1 () { ping -c 1 $@ ; }
+- icanh=$(curl http://icanhazip.com)
+- ipeth0=$(ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//' | head --lines=1)
+
+
+install:
+- php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+# - sudo ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
+#^ ERROR: [pool www] cannot get gid for group 'nobody'
+# sudo: php-fpm: command not found
+- sudo cp info.php /usr/share/nginx/html
+- sudo cp --force .nginx-default /etc/nginx/sites-available/default
+- sudo service nginx restart
 
 
 script:
 - service nginx status
-- w3m -dump http://localhost:80
-- curl --connect-timeout 1 http://localhost | w3m -dump -T text/html
-- curl http://icanhazip.com
-- ping -c 1 $(curl http://icanhazip.com)
-- curl --connect-timeout 1 http://$(curl http://icanhazip.com) | w3m -dump -T text/html
-- ping -c 1 $(ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//' | head --lines=1)
-- curl --connect-timeout 1 http://$(ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//' | head --lines=1) | w3m -dump -T text/html
+- curlw http://localhost
 
 
 after_script:
@@ -26,23 +38,22 @@ after_script:
 - dpkg --listfiles nginx
 - dpkg --listfiles nginx-common
 - dpkg --listfiles nginx-core
-- ls --color --recursive /etc/nginx
+- ls --recursive /etc/nginx
 - cat /etc/nginx/nginx.conf
 - cat /etc/nginx/sites-available/default
 - grep 'server_name.*;$' /etc/nginx/sites-available/*
 - cat .nginx-default
-- grep 'server_name.*;$' /etc/nginx/sites-available/* .nginx-default
 - grep 'server_name.*;$' .nginx-default
-- colordiff --minimal --side-by-side /etc/nginx/sites-available/default .nginx-default
-- sudo cp --force .nginx-default /etc/nginx/sites-available/default
+- colordiff --side-by-side --minimal /etc/nginx/sites-available/default .nginx-default
+- colordiff --unified --minimal /etc/nginx/sites-available/default .nginx-default
 - cat /etc/default/nginx
-- ls --color /usr/share/nginx/html
-- w3m -dump /usr/share/nginx/html/index.html
-- w3m -dump /usr/share/nginx/html/50x.html
+- ls /usr/share/nginx/html
+- w3m /usr/share/nginx/html/index.html
+- w3m /usr/share/nginx/html/50x.html
 - ps -C nginx
-- ls -A --color /var/www
+- ls -A /var/www
 
-- ls --color /var/run
+- ls /var/run
 - grep cgi.fix_pathinfo /etc/php5/fpm/php.ini #####################################3
 - php-fpm --version
 - php --ini
@@ -50,9 +61,9 @@ after_script:
 - php-fpm -i
 - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm -i
 - command -v php-fpm
-- ls $(command -v php-fpm) --color
-- ls $(command -v php-fpm) --color --dereference
-- ls ~/.phpenv/versions --color
+- ls $(command -v php-fpm)
+- ls $(command -v php-fpm) --dereference
+- ls ~/.phpenv/versions
 - ls ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
 - grep '^listen' ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
@@ -62,19 +73,17 @@ after_script:
 - find ~/.phpenv/versions -name php.ini
 - find ~/.phpenv/versions/$(phpenv version-name) -name php.ini
 - man php-fpm
-- php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
-# - sudo ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm --fpm-config ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default
-#^ ERROR: [pool www] cannot get gid for group 'nobody'
-# sudo: php-fpm: command not found
-- ls --color /var/run
-- ls --color log
-- ls --color log/php-fpm.log
-- ls --color /log
-- ls --color /log/php-fpm.log
+- ls /var/run
+- ls log
+- ls log/php-fpm.log
+- ls /log
+- ls /log/php-fpm.log
 - ps -C php-fpm
 # - find / -name php5-fpm.sock
 
-- sudo service nginx restart
-- ps -C nginx
-- sudo cp info.php /usr/share/nginx/html
-- w3m -dump http://localhost:80/info.php
+- w3m http://localhost:80/info.php
+
+- ping1 $icanh
+- curlw $icanh
+- ping1 $ipeth0
+- curlw $ipeth0
